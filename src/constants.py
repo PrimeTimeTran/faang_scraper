@@ -1,8 +1,7 @@
 meta_pages = [
-    'https://www.metacareers.com/jobs',
     'https://www.metacareers.com/jobs?q=Software%20Engineer',
-    'https://www.metacareers.com/jobs?q=AI',
     'https://www.metacareers.com/jobs?q=Data',
+    'https://www.metacareers.com/jobs?q=AI',
     'https://www.metacareers.com/jobs?q=Machine%20Learning'
 ]
 
@@ -53,34 +52,74 @@ netflix_pages = [
 ]
 
 google_pages = [
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=%22Software%20Engineer%22',
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=AI',
+    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=%22Software%20Engineer%22&page=1',
     'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Data',
+    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=AI',
     'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Machine%20Learning',
 ]
 
-microsoft_pages = [
-    'https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pg=1&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=AI&l=en_us&pg=1&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=Data&l=en_us&pg=1&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=ML&l=en_us&pg=1&pgSz=20&o=Relevance&flt=true',
+ms_pages = [
+    'https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pgSz=20&o=Relevance&flt=true',
+    'https://jobs.careers.microsoft.com/global/en/search?q=Data&l=en_us&pgSz=20&o=Relevance&flt=true',
+    'https://jobs.careers.microsoft.com/global/en/search?q=AI&l=en_us&pgSz=20&o=Relevance&flt=true',
+    'https://jobs.careers.microsoft.com/global/en/search?q=ML&l=en_us&pgSz=20&o=Relevance&flt=true',
 ]
 
 nvidia_pages = [
     'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=Software%20Engineer',
-    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=AI',
     'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=DATA',
+    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=AI',
     'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=ML',
 ]
 
+meta = {
+    'se': meta_pages[0],
+    'data': meta_pages[1],
+    'ai': meta_pages[2],
+    'ml': meta_pages[3],
+}
+
+google = {
+    'se': google_pages[0],
+    'data': google_pages[1],
+    'ai': google_pages[2],
+    'ml': google_pages[3],
+}
+
+ms = {
+    'se': ms_pages[0],
+    'data': ms_pages[1],
+    'ai': ms_pages[2],
+    'ml': ms_pages[3],
+}
+
+company_specific = {
+    "ms": {
+        "page_name": "pg"
+    },
+    "google": {
+        "page_name": "page",
+        "base_path": "https://www.google.com/about/careers/applications/jobs/results/"
+    }
+}
+
 urls = {
-    "meta": meta_pages,
-    "apple": apple_pages,
-    "amazon": amazon_pages,
-    "netflix": netflix_pages,
-    "google": google_pages,
-    "microsoft": microsoft_pages,
-    "nvidia": nvidia_pages,
+    "google": google,
+    "ms": ms,
+    "meta": meta,
+    "ms_start_key": 'Showing',
+    "ms_end_key": 'results',
+    "google_start_key": '1',
+    "google_end_key": None,
+
+    # TODO: [ ] All FAANG scrapable
+    # Various issues. Probably need to use selenium instead of downloading all at once and
+    # processing afterwards.
+    # "meta": meta_pages,
+    # "apple": apple_pages,
+    # "amazon": amazon_pages,
+    # "netflix": netflix_pages,
+    # "nvidia": nvidia_pages,
 }
 
 headers = {

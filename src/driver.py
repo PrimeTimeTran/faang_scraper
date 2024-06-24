@@ -4,6 +4,7 @@ import statistics
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
@@ -17,7 +18,7 @@ class Driver:
         options.add_argument('--disable-gpu')
         self.driver = webdriver.Chrome(service=service, options=options)
 
-    def load_page_source(self, url, timeout = 10):
+    def load_page(self, url, timeout = 10):
         self.driver.get(url)
         time.sleep(timeout)
         return self.driver.page_source
@@ -36,8 +37,6 @@ class Driver:
             print(f"File '{file}' not found.")
         except Exception as e:
             print(f'Error: search_element_in_file {e}')
-        finally:
-            pass
     
     def target_main_content(self, page_content):
         try:
@@ -71,3 +70,49 @@ class Driver:
 
     def clean(self, lst):
         return list(filter(None, [li.text.strip() for li in lst]))
+
+    def click_ms_job(self, url, timeout = 5):
+        try:
+            self.driver.get(url)
+            time.sleep(timeout)
+            el = self.driver.find_elements(By.CLASS_NAME, 'ms-List-page')
+            el[0].click()
+            time.sleep(5)
+            h1 = self.driver.find_elements(By.TAG_NAME, 'h1')
+            job_title = h1[0].text
+
+            # period,location,role,title,degree,experience,minimum,preferred,responsibilities,about
+            new_data = {
+                'period': [self.period],
+                'title': [job_title],
+                'degree': [job_title],
+                'experience': [job_title],
+            }
+
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            h1_soup_element = soup.find('h1', text=job_title)
+            parent = h1_soup_element.parent
+
+            if parent.find('h3', text='Overview') != None:
+                about = list(parent.find('h3', text='Overview').next_siblings)
+                new_data['about'] = self.clean(about)
+
+            if parent.find('h3', text='Responsibilities') != None:
+                responsibilities = list(parent.find('h3', text='Responsibilities').next_siblings)
+                new_data['responsibilities'] = self.clean(responsibilities)
+
+            if parent.find('h3', text='Qualifications') != None:
+                qualifications = list(parent.find('h3', text='Qualifications').next_siblings)
+                new_data['qualifications'] = self.clean(qualifications)
+
+            if parent.find('span', text='Preferred Qualifications:') != None:
+                preferred = list(parent.find('span', text='Preferred Qualifications:'))
+                new_data['preferred'] = self.clean(preferred)
+
+            print(job_title)
+            print(new_data['about'])
+            print(new_data['qualifications'])
+            print(new_data['responsibilities'])
+            print(new_data['responsibilities'])
+        except Exception as e:
+            print(f'Error: click_ms_job {e}')

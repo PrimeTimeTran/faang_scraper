@@ -3,7 +3,6 @@ import time
 import math
 import pandas as pd
 from bs4 import BeautifulSoup
-from datetime import datetime
 
 from .logger import Log
 from .driver import Driver
@@ -31,10 +30,10 @@ class Scraper(Driver, Log):
         self.company_page_map = {}
 
     def start_entire_thing(self):
-        # self.dl_all()
+        # self.dl_initial_index_pages()
         self.parse_company_summaries()
         self.dl_role_index_pages()
-        self.parse_show_pages()
+        self.parse_job_links_from_index_pages()
         self.dl_show_pages()
         self.parse_show_pages()
 
@@ -86,18 +85,51 @@ class Scraper(Driver, Log):
 
         self.log(f"Data appended and written back to {csv_file}.")
 
-    def dl_all(self):
+    def dl_initial_index_pages(self):
         for company in self.companies:
             for role in self.roles:
                 url = urls[company][role]
-                content = self.load_page_source(url)
-                current_date = datetime.now()
-                formatted_date = current_date.strftime("%Y-%m")
-                filename = f"{dl_dir}{company}/{formatted_date}_{company}_{role}_0.html"
+                content = self.load_page(url)
+                filename = f"{dl_dir}{company}/{self.period}_{company}_{role}_0.html"
                 with open(filename, 'w', encoding='utf-8') as f:
                     f.write(content)
                 self.log(f"File downloaded: {filename}")
                 time.sleep(2)
+
+    def dl_role_index_pages(self):
+        try:
+            for company in self.companies:
+                for role in self.roles:
+                    for i in range(1, self.company_page_map[f'{company}-{role}']+1):
+                        self.log(f'Download pages of {company}: {role}, {i}')
+                        base_url = urls[company][role]
+                        page = f"{company_specific[company]['page_name']}={i}"
+                        url = f'{base_url}&{page}'
+                        content = self.load_page(url)
+                        filename = f"{dl_dir}{company}/{self.period}_{company}_{role}_{i}.html"
+                        with open(filename, 'w', encoding='utf-8') as f:
+                            self.log(f"File downloaded: {filename}")
+                            f.write(content)
+        except Exception as e:
+            print(f"Error dl_role_index_pages: {e}")
+
+    def dl_show_pages(self):
+        self.log('dl_show_pages')
+        company = 'google'
+        try:
+            filename = f'{dl_dir}/{self.period}_{company}_job_links.csv'
+            df = pd.read_csv(filename)
+            for idx, row in df.iterrows():
+                role, link = row[2], row[3]
+                content = self.load_page(link, 5)
+                name = f"{dl_dir}{company}/{self.period}_{role}_{idx}.html"
+                with open(name, 'w', encoding='utf-8') as f:
+                    self.log(f"File downloaded: {name}")
+                    f.write(content)
+                    df.at[idx, 'filename'] = name
+                df.to_csv(filename, index=False)
+        except Exception as e:
+            print(f"Error dl_show_pages: {e}")
 
     def parse_company_summaries(self):
         try:
@@ -130,26 +162,9 @@ class Scraper(Driver, Log):
         except Exception as e:
             print(f"Error parse_company_summaries: {e}")
 
-    def dl_role_index_pages(self):
+    def parse_job_links_from_index_pages(self):
         try:
-            for company in self.companies:
-                for role in self.roles:
-                    for i in range(1, self.company_page_map[f'{company}-{role}']+1):
-                        self.log(f'Download pages of {company}: {role}, {i}')
-                        base_url = urls[company][role]
-                        page = f"{company_specific[company]['page_name']}={i}"
-                        url = f'{base_url}&{page}'
-                        content = self.load_page_source(url)
-                        filename = f"{dl_dir}{company}/{self.period}_{company}_{role}_{i}.html"
-                        with open(filename, 'w', encoding='utf-8') as f:
-                            self.log(f"File downloaded: {filename}")
-                            f.write(content)
-        except Exception as e:
-            print(f"Error dl_role_index_pages: {e}")
-
-    def parse_show_pages(self):
-        try:
-            self.log('parse_show_pages')
+            self.log('parse_job_links_from_index_pages')
             for company in self.companies:
                 filename = f'{dl_dir}{self.period}_{company}_summary.csv'
                 df = pd.read_csv(filename)
@@ -186,26 +201,7 @@ class Scraper(Driver, Log):
                                     links.append(full_link)
                         self.write_links_to_csv(links, company, role)
         except:
-            self.log('An exception occurred: parse_show_pages')
-
-    def dl_show_pages(self):
-        self.log('dl_show_pages')
-        company = 'google'
-        try:
-            filename = f'{dl_dir}/{self.period}_{company}_job_links.csv'
-            df = pd.read_csv(filename)
-            for idx, row in df.iterrows():
-                role = row[2]
-                link = row[3]
-                content = self.load_page_source(link, 5)
-                name = f"{dl_dir}{company}/{self.period}_{role}_{idx}.html"
-                with open(name, 'w', encoding='utf-8') as f:
-                    self.log(f"File downloaded: {name}")
-                    f.write(content)
-                    df.at[idx, 'filename'] = name
-                df.to_csv(filename, index=False)
-        except Exception as e:
-            print(f"Error dl_show_pages: {e}")
+            self.log('An exception occurred: parse_job_links_from_index_pages')
 
     def parse_show_pages(self):
         try:
@@ -241,9 +237,9 @@ class Scraper(Driver, Log):
                             minimum = h3[0].next_sibling
                             preferred = h3[1].next_sibling
                             responsibilities = h3[3].next_sibling
-                            
+
                             location = main.find('i', text='place').next_sibling.text
-                            
+
                             about = main.find('h3', text='About the job').next_siblings
 
                             min_texts = self.clean(minimum)
@@ -274,11 +270,28 @@ class Scraper(Driver, Log):
         except Exception as e:
             print(f"Error parse_show_pages: {e}")
 
+    def ms_start(self):
+        print('ms_start')
+        # for role in self.roles:
+        #     url = urls['ms'][role]
+        #     # content = self.load_page(url)
+        #     # filename = f"{dl_dir}{'ms'}/{self.period}_{'ms'}_{role}_0.html"
+        
+            # with open(filename, 'w', encoding='utf-8') as f:
+            #     # f.write(content)
+            #     content = f.read()
+            #     self.log(f"File downloaded: {filename}")
+        filename = f"{dl_dir}{'ms'}/{self.period}_{'ms'}_{'se'}_0.html"
+        # with open(filename, 'r', encoding='utf-8') as f:
+        # content = self.load_page('https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pgSz=20&o=Relevance&flt=true')
+        self.click_ms_job('https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pgSz=20&o=Relevance&flt=true')
+
     def fix(self):
         try:
-            filename = f'{dl_dir}/{self.period}_google_job_links.csv'
-            df = pd.read_csv(filename)
-            df.insert(0, 'period', self.period)
-            df.to_csv(filename, index=False)
+            print('Add column to far left')
+            # filename = f'{dl_dir}/{self.period}_google_job_links.csv'
+            # df = pd.read_csv(filename)
+            # df.insert(0, 'period', self.period)
+            # df.to_csv(filename, index=False)
         except Exception as e:
             print(f"Error fix: {e}")

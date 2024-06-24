@@ -1,10 +1,3 @@
-meta_pages = [
-    'https://www.metacareers.com/jobs?q=Software%20Engineer',
-    'https://www.metacareers.com/jobs?q=Data',
-    'https://www.metacareers.com/jobs?q=AI',
-    'https://www.metacareers.com/jobs?q=Machine%20Learning'
-]
-
 apple_pages = [
     'https://jobs.apple.com/en-us/search?location=United-States-USA&team=Apps-and-Frameworks-SFTWR-AF',
     'https://jobs.apple.com/en-us/search?location=United-States-USA&team=Cloud-and-Infrastructure-SFTWR-CLD',
@@ -37,62 +30,6 @@ apple_pages = [
     'https://jobs.apple.com/en-us/search?location=united-states-USA&team=applied-research-MLAI-AR',
 ]
 
-amazon_pages = [
-    'https://www.amazon.jobs/en/search?offset=0&result_limit=10&sort=relevant&distanceType=Mi&radius=Anykm&latitude=30.43977&longitude=-84.28065&loc_group_id=&loc_query=&base_query=Software%20Engineer&city=&country=USA&region=Florida&county=&query_options=&',
-    'https://www.amazon.jobs/en/search?base_query=AI&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
-    'https://www.amazon.jobs/en/search?base_query=Data&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
-    'https://www.amazon.jobs/en/search?base_query=Machine+Learning&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
-]
-
-netflix_pages = [
-    'https://jobs.netflix.com/search?q=Software%20Engineer&location=Remote%2C%20United%20States',
-    'https://jobs.netflix.com/search?q=AI&location=Remote%2C%20United%20States',
-    'https://jobs.netflix.com/search?q=Data&location=Remote%2C%20United%20States',
-    'https://jobs.netflix.com/search?q=Machine%20Learning&location=Remote%2C%20United%20States',
-]
-
-google_pages = [
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=%22Software%20Engineer%22&page=1',
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Data',
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=AI',
-    'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Machine%20Learning',
-]
-
-ms_pages = [
-    'https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=Data&l=en_us&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=AI&l=en_us&pgSz=20&o=Relevance&flt=true',
-    'https://jobs.careers.microsoft.com/global/en/search?q=ML&l=en_us&pgSz=20&o=Relevance&flt=true',
-]
-
-nvidia_pages = [
-    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=Software%20Engineer',
-    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=DATA',
-    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=AI',
-    'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=ML',
-]
-
-meta = {
-    'se': meta_pages[0],
-    'data': meta_pages[1],
-    'ai': meta_pages[2],
-    'ml': meta_pages[3],
-}
-
-google = {
-    'se': google_pages[0],
-    'data': google_pages[1],
-    'ai': google_pages[2],
-    'ml': google_pages[3],
-}
-
-ms = {
-    'se': ms_pages[0],
-    'data': ms_pages[1],
-    'ai': ms_pages[2],
-    'ml': ms_pages[3],
-}
-
 company_specific = {
     "ms": {
         "page_name": "pg"
@@ -104,22 +41,47 @@ company_specific = {
 }
 
 urls = {
-    "google": google,
-    "ms": ms,
-    "meta": meta,
+    "google": {
+        'se': 'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=%22Software%20Engineer%22&page=1',
+        'data': 'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Data',
+        'ai': 'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=AI',
+        'ml': 'https://www.google.com/about/careers/applications/jobs/results/?category=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&category=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&category=USER_EXPERIENCE&q=Machine%20Learning',
+    },
+    "ms": {
+        'se': 'https://jobs.careers.microsoft.com/global/en/search?q=software%20engineer&l=en_us&pgSz=20&o=Relevance&flt=true',
+        'data': 'https://jobs.careers.microsoft.com/global/en/search?q=Data&l=en_us&pgSz=20&o=Relevance&flt=true',
+        'ai': 'https://jobs.careers.microsoft.com/global/en/search?q=AI&l=en_us&pgSz=20&o=Relevance&flt=true',
+        'ml': 'https://jobs.careers.microsoft.com/global/en/search?q=ML&l=en_us&pgSz=20&o=Relevance&flt=true',
+    },
+    "meta": {
+        'se': 'https://www.metacareers.com/jobs?q=Software%20Engineer',
+        'data': 'https://www.metacareers.com/jobs?q=Data',
+        'ai': 'https://www.metacareers.com/jobs?q=AI',
+        'ml': 'https://www.metacareers.com/jobs?q=Machine%20Learning'
+    },
+    "netflix": {
+        'se': 'https://jobs.netflix.com/search?q=Software%20Engineer&location=Remote%2C%20United%20States',
+        'data': 'https://jobs.netflix.com/search?q=AI&location=Remote%2C%20United%20States',
+        'ai': 'https://jobs.netflix.com/search?q=Data&location=Remote%2C%20United%20States',
+        'ml': 'https://jobs.netflix.com/search?q=Machine%20Learning&location=Remote%2C%20United%20States',
+    },
+    'amazon': {
+        'se': 'https://www.amazon.jobs/en/search?offset=0&result_limit=10&sort=relevant&distanceType=Mi&radius=Anykm&latitude=30.43977&longitude=-84.28065&loc_group_id=&loc_query=&base_query=Software%20Engineer&city=&country=USA&region=Florida&county=&query_options=&',
+        'data': 'https://www.amazon.jobs/en/search?base_query=AI&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
+        'ai': 'https://www.amazon.jobs/en/search?base_query=Data&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
+        'ml': 'https://www.amazon.jobs/en/search?base_query=Machine+Learning&loc_query=&latitude=&longitude=&loc_group_id=&invalid_location=false&country=&city=&region=&county=',
+    },
+    'nvidia': {
+        'se': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=Software%20Engineer',
+        'data': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=DATA',
+        'ai': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=AI',
+        'ml': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=ML',
+    },
+
     "ms_start_key": 'Showing',
     "ms_end_key": 'results',
     "google_start_key": '1',
     "google_end_key": None,
-
-    # TODO: [ ] All FAANG scrapable
-    # Various issues. Probably need to use selenium instead of downloading all at once and
-    # processing afterwards.
-    # "meta": meta_pages,
-    # "apple": apple_pages,
-    # "amazon": amazon_pages,
-    # "netflix": netflix_pages,
-    # "nvidia": nvidia_pages,
 }
 
 headers = {

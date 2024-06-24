@@ -24,14 +24,11 @@ from .constants import urls, company_specific
 # [x] Google
 
 class Scraper(Driver, Log):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self):
+        super().__init__()
         self.roles = ['se', 'data', 'ai', 'ml']
         self.companies = ['google']
         self.company_page_map = {}
-        # current_date = datetime.now()
-        # formatted_date = current_date.strftime("%Y-%m")
-        # self.period = formatted_date
 
     def start_entire_thing(self):
         # self.dl_all()
@@ -68,7 +65,7 @@ class Scraper(Driver, Log):
                 df = pd.concat([df, df_new], ignore_index=True)
                 df.to_csv(csv_file, index=False)
         except Exception as e:
-            self.log(f'An exception occurred: {str(e)}')
+            print(f"Error write_summaries_to_csv: {e}")
 
         self.log(f"Data appended and written back to {csv_file}.")
 
@@ -130,8 +127,8 @@ class Scraper(Driver, Log):
                             'No Query param for page. Need to click through pages.')
             self.log(self.company_page_map)
             self.write_summaries_to_csv()
-        except:
-            self.log('An exception occurred: parse_company_summaries')
+        except Exception as e:
+            print(f"Error parse_company_summaries: {e}")
 
     def dl_role_index_pages(self):
         try:
@@ -147,8 +144,8 @@ class Scraper(Driver, Log):
                         with open(filename, 'w', encoding='utf-8') as f:
                             self.log(f"File downloaded: {filename}")
                             f.write(content)
-        except:
-            self.log('An exception occurred: dl_role_index_pages')
+        except Exception as e:
+            print(f"Error dl_role_index_pages: {e}")
 
     def parse_show_pages(self):
         try:
@@ -207,13 +204,14 @@ class Scraper(Driver, Log):
                     f.write(content)
                     df.at[idx, 'filename'] = name
                 df.to_csv(filename, index=False)
-        except:
-            self.log('An exception occurred: fix_csvs')
+        except Exception as e:
+            print(f"Error dl_show_pages: {e}")
 
     def parse_show_pages(self):
         try:
             self.log('parse_show_pages')
-            for _, company in enumerate(self.companies):
+            for company in self.companies:
+                self.log(company)
                 parsed_jds = f'{dl_dir}{self.period}_{company}_jobs.csv'
                 if os.path.exists(parsed_jds):
                     df = pd.read_csv(parsed_jds)
@@ -222,48 +220,59 @@ class Scraper(Driver, Log):
 
                 job_links_file = f'{dl_dir}{self.period}_{company}_job_links.csv'
                 df_links = pd.read_csv(job_links_file)
-                for idx, row in df_links.iterrows():
-                    if idx == 1: break
-                    self.log(row)
-                    filename = row[4]
-                    with open(filename, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        soup = BeautifulSoup(content, 'html.parser')
-                        main = soup.find('main')
-                        title = main.find_all('h2')[0].text
-                        degree = main.find_all('li')
-                        degree = degree[4:][0].text
-                        experiences = self.find_elements_containing_text(
-                            content, 'li', 'years of')
-                        experiences = [li.text for li in experiences]
-                        nums = self.extract_numbers(experiences)
-                        experience = self.calculate_average(nums)
-                        h3 = main.find_all('h3')
+                for _, row in df_links.iterrows():
+                    try:
+                        filename = row[4]
+                        role = row[2]
+                        with open(filename, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                            soup = BeautifulSoup(content, 'html.parser')
+                            main = soup.find('main')
+                            title = main.find_all('h2')[0].text
+                            degree = main.find_all('li')
+                            degree = degree[4:][0].text
+                            experiences = self.find_elements_containing_text(
+                                content, 'li', 'years of')
+                            experiences = [li.text for li in experiences]
+                            nums = self.extract_numbers(experiences)
+                            experience = self.calculate_average(nums)
+                            h3 = main.find_all('h3')
 
-                        minimum = h3[0].next_sibling
-                        preferred = h3[1].next_sibling
-                        responsibilities = h3[3].next_sibling
+                            minimum = h3[0].next_sibling
+                            preferred = h3[1].next_sibling
+                            responsibilities = h3[3].next_sibling
+                            
+                            location = main.find('i', text='place').next_sibling.text
+                            
+                            about = main.find('h3', text='About the job').next_siblings
 
-                        min_texts = self.clean(minimum)
-                        preferred_texts = self.clean(preferred)
-                        responsibilities_texts = self.clean(responsibilities)
+                            min_texts = self.clean(minimum)
+                            preferred_texts = self.clean(preferred)
+                            responsibilities_texts = self.clean(responsibilities)
+                            about_texts = self.clean(about)
 
-                        new_data = {
-                            'period': [self.period],
-                            'title': [title],
-                            'degree': [degree.replace('\n', '')],
-                            'experience': [experience],
-                            'minimum': [min_texts],
-                            'preferred': [preferred_texts],
-                            'responsibilities': [responsibilities_texts],
-                        }
+                            new_data = {
+                                'period': [self.period],
+                                'location': [location],
+                                'role': [role],
+                                'title': [title],
+                                'degree': [degree.strip()],
+                                'experience': [f'{experience:.2f}'],
+                                'minimum': [min_texts],
+                                'preferred': [preferred_texts],
+                                'responsibilities': [responsibilities_texts],
+                                'about': [about_texts],
+                            }
 
-                        df_new = pd.DataFrame(new_data)
-                        df = pd.concat([df, df_new], ignore_index=True)
+                            df_new = pd.DataFrame(new_data)
+                            df = pd.concat([df, df_new], ignore_index=True)
 
-                        df.to_csv(parsed_jds, index=False)
-        except:
-            self.log('An exception occurred: parse_show_pages')
+                            df.to_csv(parsed_jds, index=False)
+                    except Exception as e:
+                        print(f"Error parse_show_pages: {e}")
+                        continue
+        except Exception as e:
+            print(f"Error parse_show_pages: {e}")
 
     def fix(self):
         try:
@@ -271,5 +280,5 @@ class Scraper(Driver, Log):
             df = pd.read_csv(filename)
             df.insert(0, 'period', self.period)
             df.to_csv(filename, index=False)
-        except:
-            self.log('An exception occurred: fix_csvs')
+        except Exception as e:
+            print(f"Error fix: {e}")

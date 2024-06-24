@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 
 class Driver:
     def __init__(self) -> None:
+        super().__init__()
         chrome_driver_path = '/usr/local/bin/chromedriver'
         service = Service(executable_path=chrome_driver_path)
         options = Options()
@@ -26,17 +27,15 @@ class Driver:
             with open(file, 'r', encoding='utf-8') as file:
                 page_content = file.read()
                 soup = BeautifulSoup(page_content, 'html.parser')
-                
                 if end_term:
                     elements = soup.find_all(text=lambda text: isinstance(text, str) and text.strip().startswith(start_term) and text.strip().endswith(end_term))
                 else:
                     elements = soup.find_all(text=lambda text: isinstance(text, str) and text.strip().startswith(start_term))
                 return elements
-                
         except FileNotFoundError:
             print(f"File '{file}' not found.")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f'Error: search_element_in_file {e}')
         finally:
             pass
     
@@ -50,8 +49,8 @@ class Driver:
                     main = next_div_sibling.find('main')
                     if main:
                         return next_div_sibling.find('main')
-        except:
-            print('An exception occurred: target_main_content')
+        except Exception as e:
+            print(f'Error: target_main_content {e}')
 
     def find_elements_containing_text(self, content, tag, text):
         soup = BeautifulSoup(content, 'html.parser')

@@ -7,7 +7,6 @@ from .utils import base_dir
 
 class Log():
     def __init__(self) -> None:
-        print('go loi')
         current_date = datetime.now()
         formatted_date = current_date.strftime("%Y-%m")
         self.period = formatted_date

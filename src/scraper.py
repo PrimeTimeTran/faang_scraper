@@ -4,7 +4,7 @@ import math
 import pandas as pd
 from bs4 import BeautifulSoup
 
-from .logger import Log
+from .log import Log
 from .driver import Driver
 
 from .utils import dl_dir

@@ -77,7 +77,6 @@ urls = {
         'ai': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=AI',
         'ml': 'https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite?q=ML',
     },
-
     "ms_start_key": 'Showing',
     "ms_end_key": 'results',
     "google_start_key": '1',
